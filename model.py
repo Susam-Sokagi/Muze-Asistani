@@ -2,9 +2,7 @@ import torch
 from transformers import BertForQuestionAnswering, BertTokenizer, pipeline
 import textwrap
 
-output_dir = 'model'
-model = BertForQuestionAnswering.from_pretrained(output_dir)
-tokenizer = BertTokenizer.from_pretrained(output_dir)
+
 
 def answer_question(question, answer_text):
     print('\n###### ANSWER QUESTION ######')
@@ -28,9 +26,13 @@ def answer_question(question, answer_text):
     print('\tSoru: "' + question + '"')
     print('\tCevap: "' + answer + '"')
 
+if __name__ == '__main__':
+    output_dir = 'model'
+    model = BertForQuestionAnswering.from_pretrained(output_dir)
+    tokenizer = BertTokenizer.from_pretrained(output_dir)
 
 
-text='''Sanat tarihçileri için devasa bir konu olan Leonardo da Vinci’nin tablosu Mona Lisa, medeniyetinin sahip olduğu en özel parçalardan biri.
+    text='''Sanat tarihçileri için devasa bir konu olan Leonardo da Vinci’nin tablosu Mona Lisa, medeniyetinin sahip olduğu en özel parçalardan biri.
 Mona Lisa tablosunda resmedilmiş kişinin gerçek ismi Lisa Gherardini. Mona Lisa, “benim kadınım Lisa” anlamına geliyor.
 Orijinal tablonun boyutları 77×53 cm.
 Mona Lisa tablosunun başka bir adı daha var: La Gioconda. Bu isim ise Mona Lisa’nın “Wife of Francesco del Giocondo” yani Frances del Giocondo’nun Karısı unvanına sahip olması nedeniyle verilmiş. Kesin olmamakla birlikte Mona Lisa’nın gerçekte Lisa del Giocondo olduğu düşünülüyor.
@@ -40,6 +42,6 @@ Mosa Lisa tablosu, ilk önce Fransa kralı I. Francis’e (I. François) satılm
 Mona Lisa tablosu, sanat tarihçileri tarafından her zaman ön planda tutulsa da küresel ününü 1911 yılında onu çalan hırsıza borçlu.
 Mona Lisa, Fransa’nın en ünlü müzesi olan Louvre’da, tabloya özel tasarlanmış bir odada sergileniyor.'''
 
-answer_question("Tablonun boyutları nedir?", text)
+    answer_question("Tablonun boyutları nedir?", text)
 
-answer_question("Mona lisa tablosu nerededir?", text)
+    answer_question("Mona lisa tablosu nerededir?", text)
