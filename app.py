@@ -4,6 +4,7 @@ import logging
 import torch
 from transformers import BertForQuestionAnswering, BertTokenizer, pipeline
 import textwrap
+import time
 
 
 # DEFINE STEP               ############################
@@ -46,34 +47,49 @@ def get_text(nm):
     logging.critical(" Name: {} Icin Aciklama Metnine Erisildi".format(nm))
     return dc1
 
-# WEB               #################################
-@app.route('/', methods=['POST', 'GET'])
-def homepage():
-    if request.method == 'POST':
-      message = request.form['message']
-      if message:
-        print(message)
-        id=message
-        return message, 200
-      else:
-        print("error")
-        return None, 404
-    else:
-      #return render_template('index.html', data=User)
-      return render_template("index.html")
 
-@app.route('/answer', methods=['POST'])
-def answer():
-  message = request.form['message']
-  if message and id != '':
-    print(message)
-    return message, 200
+# ################################# WEB #################################
+id = 'null'  # QR ile gelen kategori türünü tutan global değişken
+
+# GET isteği ile anasayfayı yükleyen endpoint
+@app.route('/', methods=['GET'])
+def homepage():
+  global id
+  id = "null"
+  #return render_template('index.html', data=User)
+  return render_template("index.html")
+
+# QR kod upload için POST atılan endpoint
+@app.route('/qr_upload', methods=['POST'])
+def qr_upload():
+  qr = request.form['qr']
+  if qr:
+    global id
+    id = qr
+    qr = "Tarattığınız qr code '" + qr + "' kategorisine karşılık gelmektedir."
+    time.sleep(1)
+    return qr, 200
   else:
     print("error")
     return None, 404
 
+# Karşılıklı konuşma için POST atılan endpoint
+@app.route('/answer', methods=['POST'])
+def answer():
+  message = request.form['message']
+  if message:
+    if id != 'null':
+      message = "'" + message + "' mı demek istediniz?"
+      time.sleep(1)
+      return message, 200
+    else:
+      message = "Öncelikle QR Kod Yüklemelisiniz."
+      return message, 200
+  else:
+     print("error")
+     return None, 404
 
-# MODEL               ###############################
+# ############################### MODEL ###############################
 
 def answer_question(question, answer_text):
     print('\n###### ANSWER QUESTION ######')
