@@ -66,7 +66,7 @@ def qr_upload():
   if qr:
     global id
     id = qr
-    qr = "Tarattığınız qr code '" + qr + "' kategorisine karşılık gelmektedir."
+    qr = "QR kod başarıyla yüklendi 🤖  <br> Şimdi sorunu sorabilirsin 🤓"
     time.sleep(1)
     return qr, 200
   else:
@@ -79,9 +79,10 @@ def answer():
   message = request.form['message']
   if message:
     if id != 'null':
-      message = "'" + message + "' mı demek istediniz?"
+      message2 = "'" + message + "' mı demek istediniz?"
       time.sleep(1)
-      return message, 200
+      answer = answer_question(message, get_text(id))
+      return answer, 200
     else:
       message = "Öncelikle QR Kod Yüklemelisiniz."
       return message, 200
@@ -92,7 +93,7 @@ def answer():
 # ############################### MODEL ###############################
 
 def answer_question(question, answer_text):
-    print('\n###### ANSWER QUESTION ######')
+    #print('\n###### ANSWER QUESTION ######')
     input_ids = tokenizer.encode(question, answer_text)
     sep_index = input_ids.index(tokenizer.sep_token_id)
     num_seg_a = sep_index + 1
@@ -109,13 +110,10 @@ def answer_question(question, answer_text):
             answer += tokens[i][2:]
         else:
             answer += ' ' + tokens[i]
-    print('\tQuery has {:,} tokens.'.format(len(input_ids)))
-    print('\tSoru: "' + question + '"')
-    print('\tCevap: "' + answer + '"')
-
-#answer_question("Tablonun boyutları nedir?", get_text('mona-lisa'))
-
-
+    #print('\tQuery has {:,} tokens.'.format(len(input_ids)))
+    #print('\tSoru: "' + question + '"')
+    #print('\tCevap: "' + answer + '"')
+    return answer
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5050)
