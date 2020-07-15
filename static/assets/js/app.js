@@ -20,14 +20,18 @@ $(document).ready(function () {
     if (message === "") {
       alert("Lütfen boş metin içeren bir mesaj göndermeye çalışmayınız !");
     } else {
+      var today = new Date();
+      //var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      var time = today.getHours() + ":" + today.getMinutes();
+      //var dateTime = date+' | '+time;
       // Kullanıcının yazdığı mesajın ekrana basılması.
       $("#message-body").append(
         '<div class="d-flex justify-content-end mb-4">' +
         '<div class="msg_cotainer_send">' +
         message +
-        '<span class="msg_time_send">8:40, Bugün</span></div>' +
+        '<span class="msg_time_send"> '+ time +' </span></div>' +
         '<div class="img_cont_msg">' +
-        '<img src="https://d-tm.ppstatic.pl/kadry/1a/57/c1604c717078256513fdd67bd7de.1000.jpg" class="rounded-circle user_img_msg">' +
+        '<img src="https://i.hizliresim.com/lI85WY.png" class="rounded-circle user_img_msg">' +
         "</div></div>"
       );
       // Kullanıcının yazdığı mesajın AJAX ile backend uygulamasına POST atılması.
@@ -40,15 +44,19 @@ $(document).ready(function () {
         // Başarılı sonuçlanan AJAX fonksiyonu eylemi
         success: function (response) {
           if (response != null) {
+            var today = new Date();
+            //var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            var time = today.getHours() + ":" + today.getMinutes();
+            //var dateTime = date+' | '+time;
             var data = response;
             // Backend'den gelen cevabın ekrana bot tarafından yazılıyor gibi basılması.
             $("#message-body").append(
               '<div class="d-flex justify-content-start mb-4">' +
               '<div class="img_cont_msg">' +
-              '<img src="https://d-tm.ppstatic.pl/kadry/1a/57/c1604c717078256513fdd67bd7de.1000.jpg" class="rounded-circle user_img_msg">' +
+              '<img src="https://avatars3.githubusercontent.com/u/68184733?s=200&v=4" class="rounded-circle user_img_msg">' +
               '</div><div class="msg_cotainer">' +
               data +
-              '<span class="msg_time">8:40, Bugün</span></div></div>'
+              '<span class="msg_time"> '+ time +' </span></div></div>'
             );
           } else {
             // Başarısız sonuçlanan Backend fonksiyonu response değeri
@@ -84,6 +92,10 @@ $(document).ready(function (e) {
       // Başarılı gerçekleşen POST işlem fonksiyonu
       success: function (response) {
         if (response[0].symbol[0].error == null) {
+          var today = new Date();
+          //var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+          var time = today.getHours() + ":" + today.getMinutes();
+          //var dateTime = date+' | '+time;
           var data = response[0].symbol[0].data;
           // ---------------------------------------------------
           // API'den gelen QR kod içeriğinin, uygulama backend kısmına AJAX ile POST atılması
@@ -99,10 +111,10 @@ $(document).ready(function (e) {
               $("#message-body").append(
                 '<div class="d-flex justify-content-start mb-4">' +
                 '<div class="img_cont_msg">' +
-                '<img src="https://d-tm.ppstatic.pl/kadry/1a/57/c1604c717078256513fdd67bd7de.1000.jpg" class="rounded-circle user_img_msg">' +
+                '<img src="https://avatars3.githubusercontent.com/u/68184733?s=200&v=4" class="rounded-circle user_img_msg">' +
                 '</div><div class="msg_cotainer">' +
                 response +
-                '<span class="msg_time">8:40, Bugün</span></div></div>'
+                '<span class="msg_time"> '+ time +' </span></div></div>'
               );
             },
             // Başarısız gerçekleşen Backend POST fonksiyonu
