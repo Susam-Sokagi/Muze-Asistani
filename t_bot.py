@@ -17,9 +17,9 @@ logging.basicConfig(format='%(asctime)-10s   %(message)s',datefmt="%Y-%m-%d-%H-%
 logger = logging.getLogger(__name__)
 PHOTO, QUESTION = range(2)
 TOKEN = "  "
-output_dir = 'model'
-model = BertForQuestionAnswering.from_pretrained(output_dir)
-tokenizer = BertTokenizer.from_pretrained(output_dir)
+
+model = BertForQuestionAnswering.from_pretrained("savasy/bert-base-turkish-squad")
+tokenizer = BertTokenizer.from_pretrained("savasy/bert-base-turkish-squad")
 
 
 # Telegram              ###################################
