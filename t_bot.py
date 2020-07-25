@@ -3,6 +3,8 @@ import numpy as np
 import pyzbar.pyzbar as pyzbar
 import logging
 import torch
+import sqlite3
+
 from transformers import BertForQuestionAnswering, BertTokenizer, pipeline
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
@@ -10,13 +12,36 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
 import textwrap
 import time
 
+# QR Kod Okuyucu         ###################################
+def qr(img):
+    image = cv2.imread(img)
+
+    decodedObjects = pyzbar.decode(image)
+    for obj in decodedObjects:
+        print("Type:", obj.type)
+        data = obj.data.decode("utf-8")
+        print("Data: ", data, "\n")
+    return data
+
+###################### DB conn ##############
+
+connection = sqlite3.connect('database.db', check_same_thread=False)
+
+#qr koddan gelen name ile textini alma işlemi
+def get_text(nm):
+    dc1 = connection.execute("SELECT description1 FROM muze WHERE name = ? ", (nm,))
+    logging.critical(" Name: {} Icin Aciklama Metnine Erisildi".format(nm))
+    text_data=dc1.fetchall()[0][0]
+    print(text_data)
+    return text_data
+
 
 # DEFINE STEP               ############################
 
 logging.basicConfig(format='%(asctime)-10s   %(message)s',datefmt="%Y-%m-%d-%H-%M-%S", level=logging.INFO)
 logger = logging.getLogger(__name__)
 PHOTO, QUESTION = range(2)
-TOKEN = "  "
+TOKEN = "TOKEN"
 
 model = BertForQuestionAnswering.from_pretrained("savasy/bert-base-turkish-squad")
 tokenizer = BertTokenizer.from_pretrained("savasy/bert-base-turkish-squad")
@@ -37,20 +62,13 @@ def photo(update, context):
     update.message.reply_text('Harika şimdi soru sorabilirsin')
     return QUESTION
 
+
+
 def question(update, context):
     user = update.message.from_user
     logger.info("Question of %s: %s", user.first_name, update.message.text)
-
-    text = '''Sanat tarihçileri için devasa bir konu olan Leonardo da Vinci’nin tablosu Mona Lisa, medeniyetinin sahip olduğu en özel parçalardan biri.
-Mona Lisa tablosunda resmedilmiş kişinin gerçek ismi Lisa Gherardini. Mona Lisa, “benim kadınım Lisa” anlamına geliyor.
-Orijinal tablonun boyutları 77×53 cm.
-Mona Lisa tablosunun başka bir adı daha var: La Gioconda. Bu isim ise Mona Lisa’nın “Wife of Francesco del Giocondo” yani Frances del Giocondo’nun Karısı unvanına sahip olması nedeniyle verilmiş. Kesin olmamakla birlikte Mona Lisa’nın gerçekte Lisa del Giocondo olduğu düşünülüyor.
-Mona Lisa tablosunun herhangi bir sigortası yok. Bunun nedeni de sigortalanamayacak kadar değerli görülmesi. Hiçbir sigorta şirketi bu riske girmek istemiyor yani.
-Yüz tanımada kullanılan sisteme göre Mona Lisa’nın yüzü %83 mutlu, %9 bıkkın, %6 korkmuş ve %2 sinirli mimiklere sahip.
-Mosa Lisa tablosu, ilk önce Fransa kralı I. Francis’e (I. François) satılmış. Leonardo’nun başyapıtı, kralın isteği üzerine Fontainebleau Sarayı’nda sergilenmiş.
-Mona Lisa tablosu, sanat tarihçileri tarafından her zaman ön planda tutulsa da küresel ününü 1911 yılında onu çalan hırsıza borçlu.
-Mona Lisa, Fransa’nın en ünlü müzesi olan Louvre’da, tabloya özel tasarlanmış bir odada sergileniyor. '''
-    answer = answer_question(update.message.text, text)
+    photo_data = qr('user_photo.jpg')
+    answer = answer_question(update.message.text, get_text(photo_data))
     update.message.reply_text(answer)
     logger.info("Answer for %s: %s", update.message.text, answer)
 
@@ -84,19 +102,6 @@ def main():
     updater.idle()
 
 
-
-
-
-# QR Kod Okuyucu         ###################################
-def qr(img):
-    image = cv2.imread(img)
-
-    decodedObjects = pyzbar.decode(image)
-    for obj in decodedObjects:
-        print("Type:", obj.type)
-        print("Data: ", obj.data.decode("utf-8"), "\n")
-        return obj.data.decode("utf-8")
-
 # ############################### MODEL ###############################
 
 def answer_question(question, answer_text):
@@ -120,3 +125,5 @@ def answer_question(question, answer_text):
 
 if __name__ == '__main__':
     main()
+
+

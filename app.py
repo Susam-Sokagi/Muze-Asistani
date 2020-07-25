@@ -5,6 +5,9 @@ import torch
 from transformers import BertForQuestionAnswering, BertTokenizer, pipeline
 import textwrap
 import time
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 
 
 
@@ -20,7 +23,7 @@ db = SQLAlchemy(app)
 tokenizer = BertTokenizer.from_pretrained("savasy/bert-base-turkish-squad")
 model = BertForQuestionAnswering.from_pretrained("savasy/bert-base-turkish-squad")
 
-# DATABASE               ############################
+# DATABASE  ############################
 class muze(db.Model):
     name = db.Column('name', db.String(12), primary_key=True)
     description1 = db.Column(db.String(4096))
@@ -93,29 +96,51 @@ def answer():
 # ############################### MODEL ###############################
 
 def answer_question(question, answer_text):
-    #print('\n###### ANSWER QUESTION ######')
+    print('\n###### ANSWER QUESTION ######')
+
     input_ids = tokenizer.encode(question, answer_text)
     sep_index = input_ids.index(tokenizer.sep_token_id)
     num_seg_a = sep_index + 1
     num_seg_b = len(input_ids) - num_seg_a
-    segment_ids = [0]*num_seg_a + [1]*num_seg_b
+    segment_ids = [0] * num_seg_a + [1] * num_seg_b
     assert len(segment_ids) == len(input_ids)
-    start_scores, end_scores = model(torch.tensor([input_ids]), token_type_ids=torch.tensor([segment_ids]))
-    answer_start = torch.argmax(start_scores)
-    answer_end = torch.argmax(end_scores)
-    tokens = tokenizer.convert_ids_to_tokens(input_ids)
-    answer = tokens[answer_start]
-    for i in range(answer_start + 1, answer_end + 1):
-        if tokens[i][0:2] == '##':
-            answer += tokens[i][2:]
-        else:
-            answer += ' ' + tokens[i]
+    pred_start, pred_end = model(torch.tensor([input_ids]), token_type_ids=torch.tensor([segment_ids]))
+
+    for idx, (start, end) in enumerate(zip(pred_start, pred_end)):
+        start = torch.argmax(pred_start)
+        end = torch.argmax(pred_end)
+        tokens = tokenizer.convert_ids_to_tokens(input_ids)
+
+        answer = tokens[start]
+
+        for i in range(start + 1, end + 1):
+            if tokens[i][0:2] == '##':
+                answer += tokens[i][2:]
+            else:
+                answer += ' ' + tokens[i]
+
+    acc = i / len(input_ids)
+    print(f"\nscore={acc:.2f}")
+
+    print(i)
+    print(len(input_ids))
+    print(tokenizer.sep_token_id)
+    print(segment_ids)
+    print(sep_index)
+    print(input_ids)
+
 
     #print('\tQuery has {:,} tokens.'.format(len(input_ids)))
     #print('\tSoru: "' + question + '"')
     #print('\tCevap: "' + answer + '"')
 
+
+
+
     return answer
+
+
+
 
 if __name__ == '__main__':
     app.run()
