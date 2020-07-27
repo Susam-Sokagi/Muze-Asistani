@@ -5,7 +5,6 @@
     <title>Chat</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
         id="bootstrap-css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -19,6 +18,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
     <script src="{{ url_for('static', filename='assets/js/app.js') }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="card-body contacts_body">
                         <ui class="contacts">
-                            <li class="active">
+                            <li id="bot" class="active" style="cursor:pointer;">
                                 <div class="d-flex bd-highlight">
                                     <div class="img_cont">
                                         <img src="https://avatars3.githubusercontent.com/u/68184733?s=200&v=4"
@@ -49,12 +49,25 @@
                                     </div>
                                 </div>
                             </li>
+                            <li id="eserler" style="cursor:pointer;">
+                                <div class="d-flex bd-highlight">
+                                    <div class="img_cont">
+                                        <img src="https://avatars3.githubusercontent.com/u/68184733?s=200&v=4"
+                                            class="rounded-circle user_img">
+                                        <span class="online_icon"></span>
+                                    </div>
+                                    <div class="user_info">
+                                        <span>Müze Eserleri </span>
+                                        <p>Eserlere Ait QR Kodlar - Açık Hack '20</p>
+                                    </div>
+                                </div>
+                            </li>
                         </ui>
                     </div>
                     <div class="card-footer"></div>
                 </div>
             </div>
-            <div class="col-md-8 col-xl-6 chat">
+            <div id="cc" class="col-md-8 col-xl-6 chat">
                 <div class="card">
                     <div class="card-header msg_head">
                         <div class="d-flex bd-highlight">
@@ -79,8 +92,24 @@
                         </div>
                     </div>
 
-                    <!-------------- CHAT AREA START ------------------>
-                    <div id="message-body" class="card-body msg_card_body">
+                    <!-------------- BOT CHAT AREA START ------------------>
+                    <div id="message-body" class="card-body msg_card_body" style="display:block;">
+                        <!------ BOT MESSAGE ---------->
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <!------ Bot Profil Fotosu ---------->
+                                <img src="https://avatars3.githubusercontent.com/u/68184733?s=200&v=4"
+                                    class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                                Merhaba, 📎 (ataç simgesi) ile QR kodu yüklersen sana yardımcı olabilirim.
+                                <span class="msg_time">Bot</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-------------- ESERLER AREA START ------------------>
+                    <div id="message-body-2" class="card-body msg_card_body" style="display:none;">
 
                         <!------ BOT MESSAGE ---------->
                         <div class="d-flex justify-content-start mb-4">
@@ -90,11 +119,36 @@
                                     class="rounded-circle user_img_msg">
                             </div>
                             <div class="msg_cotainer">
-                                Merhaba,  📎 (ataç simgesi) ile QR kodu yüklersen sana yardımcı olabilirim.
+                                Merhaba, Benim aracılığım ile QR kodlarına hızlı ve pratik bir şekilde ulaşabilirsin.
                                 <span class="msg_time">Bot</span>
                             </div>
                         </div>
-                        
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <!------ Bot Profil Fotosu ---------->
+                                <img src="https://avatars3.githubusercontent.com/u/68184733?s=200&v=4"
+                                    class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                                <div style="display:inline; float:left; margin: 2%; width: 20%; height: 20%; text-align: center;">
+                                    <a download="qr.png" href="/static/assets/qr/mona-lisa.png">
+                                    <img src="{{ url_for('static', filename='assets/qr/mona-lisa.png') }}" 
+                                    style="display:block; margin:0; width: 100%; height: 100%;">
+                                    </a>
+                                    <span style="margin:0 auto; font-size: small; font-weight: 700;">MONA LISA</span>
+                                </div>
+                                <div href="x.com" style="display:inline; float:left; margin: 2%; width: 20%; height: 20%; text-align: center;">
+                                    <a download="qr.png" href="/static/assets/qr/sinus-kadrani.png">
+                                    <img src="{{ url_for('static', filename='assets/qr/sinus-kadrani.png') }}"
+                                    style="display:block; margin:0; width: 100%; height: 1000%;">
+                                    </a>
+                                    <span style="margin:0 auto; font-size: small; font-weight: 700;">SINUS KADRANI</span>
+                                </div>
+
+                                <span class="msg_time">Bot</span>
+                            </div>
+                        </div>
+
                     </div>
                     <!-------------- CHAT AREA END ------------------>
 

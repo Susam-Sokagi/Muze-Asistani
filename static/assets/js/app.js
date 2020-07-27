@@ -34,6 +34,11 @@ $(document).ready(function () {
         '<img src="https://i.hizliresim.com/lI85WY.png" class="rounded-circle user_img_msg">' +
         "</div></div>"
       );
+      $("#message-body").animate(
+        { scrollTop: $("#message-body")[0].scrollHeight },
+        1000
+      );
+      $("#message_text").val("");
       // Kullanıcının yazdığı mesajın AJAX ile backend uygulamasına POST atılması.
       $.ajax({
         data: {
@@ -57,6 +62,10 @@ $(document).ready(function () {
               '</div><div class="msg_cotainer">' +
               data +
               '<span class="msg_time"> '+ time +' </span></div></div>'
+            );
+            $("#message-body").animate(
+              { scrollTop: $("#message-body")[0].scrollHeight },
+              1000
             );
           } else {
             // Başarısız sonuçlanan Backend fonksiyonu response değeri
@@ -116,6 +125,11 @@ $(document).ready(function (e) {
                 response +
                 '<span class="msg_time"> '+ time +' </span></div></div>'
               );
+              $("#message-body").animate(
+                { scrollTop: $("#message-body")[0].scrollHeight },
+                1000
+              );
+              $("#message_text").val("");
             },
             // Başarısız gerçekleşen Backend POST fonksiyonu
             error: function (e) {
@@ -135,4 +149,40 @@ $(document).ready(function (e) {
     });
     $("#upload-button").css("display", "none");
   });
+});
+
+// Bot Konuşması Display Özelliği
+$(document).ready(function () {
+  $("#bot").click(function () {
+    $("#message-body-2").css("display", "none");
+    $("#message-body").css("display", "block");
+    $("#bot").addClass("active");
+    $("#eserler").removeClass("active");
+    $("#message_text").prop("disabled", false);
+    $("#input_field").prop("disabled", false);
+  });
+});
+
+// Eserler Konuşması Display Özelliği
+$(document).ready(function () {
+  $("#eserler").click(function () {
+    $("#message-body").css("display", "none");
+    $("#message-body-2").css("display", "block");
+    $("#bot").removeClass("active");
+    $("#eserler").addClass("active");
+    $("#message_text").prop("disabled", true);
+    $("#input_field").prop("disabled", true);
+  });
+});
+
+
+
+// Enter İle Send Messsage Trigger Özelliği
+$(document).ready(function () {
+$("#message_text").keypress(function (e) {
+  if (e.keyCode == 13 && !e.shiftKey) {
+    e.preventDefault();
+    $("#btnSubmit").trigger("click");
+  }
+});
 });

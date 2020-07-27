@@ -16,11 +16,11 @@ import time
 logging.basicConfig(format='%(asctime)-10s   %(message)s',datefmt="%Y-%m-%d-%H-%M-%S", level=logging.INFO)
 logger = logging.getLogger(__name__)
 PHOTO, QUESTION = range(2)
-TOKEN = "  "
+TOKEN = ""
+
 
 model = BertForQuestionAnswering.from_pretrained("savasy/bert-base-turkish-squad")
 tokenizer = BertTokenizer.from_pretrained("savasy/bert-base-turkish-squad")
-
 
 # Telegram              ###################################
 def start(update, context):

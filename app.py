@@ -17,8 +17,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-tokenizer = BertTokenizer.from_pretrained("savasy/bert-base-turkish-squad")
-model = BertForQuestionAnswering.from_pretrained("savasy/bert-base-turkish-squad")
+output_dir = 'model'
+model = BertForQuestionAnswering.from_pretrained(output_dir)
+tokenizer = BertTokenizer.from_pretrained(output_dir)
 
 # DATABASE               ############################
 class muze(db.Model):
@@ -118,6 +119,6 @@ def answer_question(question, answer_text):
     return answer
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug='true')
 
 
