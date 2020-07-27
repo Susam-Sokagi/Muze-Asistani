@@ -1,16 +1,9 @@
-import cv2
-import numpy as np
+import cv2, logging, sqlite3, torch
 import pyzbar.pyzbar as pyzbar
-import logging
-import torch
-import sqlite3
-
 from transformers import BertForQuestionAnswering, BertTokenizer, pipeline
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                     ConversationHandler)
-import textwrap
-import time
 
 # QR Kod Okuyucu         ###################################
 def qr(img):
@@ -18,9 +11,8 @@ def qr(img):
 
     decodedObjects = pyzbar.decode(image)
     for obj in decodedObjects:
-        print("Type:", obj.type)
         data = obj.data.decode("utf-8")
-        print("Data: ", data, "\n")
+        print("Qr Data: ", data, "\n")
     return data
 
 ###################### DB conn ##############
@@ -32,20 +24,20 @@ def get_text(nm):
     dc1 = connection.execute("SELECT description1 FROM muze WHERE name = ? ", (nm,))
     logging.critical(" Name: {} Icin Aciklama Metnine Erisildi".format(nm))
     text_data=dc1.fetchall()[0][0]
-    print(text_data)
     return text_data
 
 
 # DEFINE STEP               ############################
 
-logging.basicConfig(format='%(asctime)-10s   %(message)s',datefmt="%Y-%m-%d-%H-%M-%S", level=logging.INFO)
+#logging.basicConfig(format='%(asctime)-10s   %(message)s',datefmt="%Y-%m-%d-%H-%M-%S", level=logging.INFO)
 logger = logging.getLogger(__name__)
 PHOTO, QUESTION = range(2)
+TOKEN = "token"
 
-TOKEN = "TOKEN"
+output_dir = "model"
+model = BertForQuestionAnswering.from_pretrained(output_dir)
+tokenizer = BertTokenizer.from_pretrained(output_dir)
 
-model = BertForQuestionAnswering.from_pretrained("savasy/bert-base-turkish-squad")
-tokenizer = BertTokenizer.from_pretrained("savasy/bert-base-turkish-squad")
 
 # Telegram              ###################################
 def start(update, context):
@@ -109,21 +101,30 @@ def answer_question(question, answer_text):
     sep_index = input_ids.index(tokenizer.sep_token_id)
     num_seg_a = sep_index + 1
     num_seg_b = len(input_ids) - num_seg_a
-    segment_ids = [0]*num_seg_a + [1]*num_seg_b
+    segment_ids = [0] * num_seg_a + [1] * num_seg_b
     assert len(segment_ids) == len(input_ids)
-    start_scores, end_scores = model(torch.tensor([input_ids]), token_type_ids=torch.tensor([segment_ids]))
-    answer_start = torch.argmax(start_scores)
-    answer_end = torch.argmax(end_scores)
+    pred_start, pred_end = model(torch.tensor([input_ids]), token_type_ids=torch.tensor([segment_ids]))
+
+    # baslangıc ve bıtıs ıcın en ıyı olasılıkları secıyoruz
+    start = torch.argmax(pred_start)
+    end = torch.argmax(pred_end)
+    # geri dönus
     tokens = tokenizer.convert_ids_to_tokens(input_ids)
-    answer = tokens[answer_start]
-    for i in range(answer_start + 1, answer_end + 1):
+    answer = tokens[start]
+    score = torch.max(pred_start)
+
+    for i in range(start + 1, end + 1):
         if tokens[i][0:2] == '##':
             answer += tokens[i][2:]
         else:
             answer += ' ' + tokens[i]
+
+    print("Answer: {}".format(answer))
+    print("Score: {}".format(score))
+
+
     return answer
 
 if __name__ == '__main__':
     main()
-
 

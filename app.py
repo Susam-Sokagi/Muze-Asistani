@@ -1,19 +1,11 @@
-from flask import Flask, redirect, url_for, request, render_template
+from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
-import logging
-import torch
-from transformers import BertForQuestionAnswering, BertTokenizer, pipeline
-import textwrap
-import time
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-
-
+import logging, time, torch
+from transformers import BertForQuestionAnswering, BertTokenizer
 
 # DEFINE STEP        ############################
 
-logging.basicConfig(format='%(asctime)-10s   %(message)s',datefmt="%Y-%m-%d-%H-%M-%S", level=logging.INFO)
+#logging.basicConfig(format='%(asctime)-10s   %(message)s',datefmt="%Y-%m-%d-%H-%M-%S", level=logging.INFO)
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -50,7 +42,6 @@ def get_text(nm):
     dc1 = text.description1
     logging.critical(" Name: {} Icin Aciklama Metnine Erisildi".format(nm))
     return dc1
-
 
 # ################################# WEB #################################
 id = 'null'  # QR ile gelen kategori türünü tutan global değişken
@@ -97,8 +88,6 @@ def answer():
 # ############################### MODEL ###############################
 
 def answer_question(question, answer_text):
-    print('\n###### ANSWER QUESTION ######')
-
     input_ids = tokenizer.encode(question, answer_text)
     sep_index = input_ids.index(tokenizer.sep_token_id)
     num_seg_a = sep_index + 1
@@ -107,41 +96,23 @@ def answer_question(question, answer_text):
     assert len(segment_ids) == len(input_ids)
     pred_start, pred_end = model(torch.tensor([input_ids]), token_type_ids=torch.tensor([segment_ids]))
 
-    for idx, (start, end) in enumerate(zip(pred_start, pred_end)):
-        start = torch.argmax(pred_start)
-        end = torch.argmax(pred_end)
-        tokens = tokenizer.convert_ids_to_tokens(input_ids)
+    #baslangıc ve bıtıs ıcın en ıyı olasılıkları secıyoruz
+    start = torch.argmax(pred_start)
+    end = torch.argmax(pred_end)
+    #geri dönus
+    tokens = tokenizer.convert_ids_to_tokens(input_ids)
+    answer = tokens[start]
+    score = torch.max(pred_start)
 
-        answer = tokens[start]
+    for i in range(start + 1, end + 1):
+        if tokens[i][0:2] == '##':
+            answer += tokens[i][2:]
+        else:
+            answer += ' ' + tokens[i]
 
-        for i in range(start + 1, end + 1):
-            if tokens[i][0:2] == '##':
-                answer += tokens[i][2:]
-            else:
-                answer += ' ' + tokens[i]
-
-    acc = i / len(input_ids)
-    print(f"\nscore={acc:.2f}")
-
-    print(i)
-    print(len(input_ids))
-    print(tokenizer.sep_token_id)
-    print(segment_ids)
-    print(sep_index)
-    print(input_ids)
-
-
-    #print('\tQuery has {:,} tokens.'.format(len(input_ids)))
-    #print('\tSoru: "' + question + '"')
-    #print('\tCevap: "' + answer + '"')
-
-
-
-
+    print("Answer: {}".format(answer))
+    print("Score: {}".format(score))
     return answer
-
-
-
 
 if __name__ == '__main__':
     app.run(debug='true')
