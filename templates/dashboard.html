@@ -1,0 +1,389 @@
+<!doctype html>
+<html class="no-js" lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Susam Sokağı Arayüz</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/icon-kit/dist/css/iconkit.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/ionicons/dist/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/jvectormap/jquery-jvectormap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/theme.min.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <style type="text/css">
+        .wordcloud {
+            height: 3.5in;
+            page-break-after: always;
+            page-break-inside: avoid;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="header-top" header-theme="light">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between">
+                    <div class="top-menu d-flex align-items-center">
+                        <button type="button" class="btn-icon mobile-nav-toggle d-lg-none"><span></span></button>
+                        <div class="header-search">
+                            <div class="input-group">
+                                <span class="input-group-addon search-close"><i class="ik ik-x"></i></span>
+                                <input type="text" class="form-control">
+                                <span class="input-group-addon search-btn"><i class="ik ik-search"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="top-menu d-flex align-items-center">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"><img class="avatar" src="{{ url_for('static', filename='img/user.jpg') }}" alt=""></a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="/profile"><i class="ik ik-user dropdown-icon"></i>
+                                    Profil</a>
+                                <a class="dropdown-item" href="#"><i class="ik ik-settings dropdown-icon"></i>
+                                    Ayarlar</a>
+                                <a class="dropdown-item" href="#"><span class="float-right"><span
+                                            class="badge badge-primary">6</span></span><i class="ik ik-mail dropdown-icon"></i>
+                                    Gelen Kutusu</a>
+                                <a class="dropdown-item" href="#"><i class="ik ik-navigation dropdown-icon"></i>
+                                    Mesajlar</a>
+                                <a class="dropdown-item" href="#"><i class="ik ik-power dropdown-icon"></i>
+                                    Çıkış</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-wrap">
+            <div class="app-sidebar colored">
+                <div class="sidebar-header">
+                    <a class="header-brand" href="index.html">
+                        <!-- 
+                            <div class="logo-img">
+                               <img src="" class="header-brand-img" alt=""> 
+                            </div> 
+                            -->
+                        <span class="text">Susam Sokağı</span>
+                    </a>
+                    <button type="button" class="nav-toggle"><i data-toggle="expanded"
+                            class="ik ik-toggle-right toggle-icon"></i></button>
+                    <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>
+                </div>
+
+                <div class="sidebar-content">
+                    <div class="nav-container">
+                        <nav id="main-menu-navigation" class="navigation-main">
+                            <div class="nav-lavel">Genel</div>
+                            <div class="nav-item active">
+                                <a href="/dashboard"><i class="ik ik-bar-chart-2"></i><span>Arayüz</span></a>
+                            </div>
+                            <div class="nav-lavel">Kullanıcı</div>
+                            <div class="nav-item">
+                                <a href="/profile"><i class="ik ik-user"></i><span>Profil</span></a>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="container-fluid">
+                    <div class="row clearfix">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="widget">
+                                <div class="widget-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="state">
+                                            <h6>Konuşma Oturumu</h6>
+                                            <h2>3,210</h2>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ik ik-message-square"></i>
+                                        </div>
+                                    </div>
+                                    <small class="text-small mt-10 d-block">Son Aya Göre 20% Yükselme</small>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="75"
+                                        aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="widget">
+                                <div class="widget-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="state">
+                                            <h6>Toplam Oturum Süresi</h6>
+                                            <h2>21,410 dk</h2>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ik ik-eye"></i>
+                                        </div>
+                                    </div>
+                                    <small class="text-small mt-10 d-block">Son Aya Göre 20% Yükselme</small>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="78"
+                                        aria-valuemin="0" aria-valuemax="100" style="width: 78%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="widget">
+                                <div class="widget-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="state">
+                                            <h6>Aktif Müze</h6>
+                                            <h2>16</h2>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ik ik-map-pin"></i>
+                                        </div>
+                                    </div>
+                                    <small class="text-small mt-10 d-block">Toplam Aktif Çalışan Müze Sayısı</small>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="31"
+                                        aria-valuemin="0" aria-valuemax="100" style="width: 31%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="widget">
+                                <div class="widget-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="state">
+                                            <h6>Eser Sayısı</h6>
+                                            <h2>11,410</h2>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ik ik-search"></i>
+                                        </div>
+                                    </div>
+                                    <small class="text-small mt-10 d-block">Toplam Taranan İçerik Sayısı</small>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="20"
+                                        aria-valuemin="0" aria-valuemax="100" style="width: 20%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-9     col-md-12">
+                                            <h3 class="card-title">Aktif Müzeler ve Konumlar</h3>
+                                            <div id="visitfromworld" style="width:100%; height:350px"></div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-12">
+                                            <div class="row mb-15">
+                                                <div class="col-9">UK</div>
+                                                <div class="col-3 text-right">82%</div>
+                                                <div class="col-12">
+                                                    <div class="progress progress-sm mt-5">
+                                                        <div class="progress-bar bg-green" role="progressbar"
+                                                            style="width: 82%" aria-valuenow="82" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-15">
+                                                <div class="col-9"> UEA</div>
+                                                <div class="col-3 text-right">75%</div>
+                                                <div class="col-12">
+                                                    <div class="progress progress-sm mt-5">
+                                                        <div class="progress-bar bg-green" role="progressbar"
+                                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-15">
+                                                <div class="col-9"> USA</div>
+                                                <div class="col-3 text-right">71%</div>
+                                                <div class="col-12">
+                                                    <div class="progress progress-sm mt-5">
+                                                        <div class="progress-bar bg-purple" role="progressbar"
+                                                            style="width: 71%" aria-valuenow="71" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-9">China</div>
+                                                <div class="col-3 text-right">63%</div>
+                                                <div class="col-12">
+                                                    <div class="progress progress-sm mt-5">
+                                                        <div class="progress-bar bg-blue" role="progressbar"
+                                                            style="width: 63%" aria-valuenow="63" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Bot İle Konuşma</h3>
+                                    <div class="card-header-right">
+                                        <ul class="list-unstyled card-option">
+                                            <li><i class="ik ik-chevron-left action-toggle"></i></li>
+                                            <li><i class="ik ik-minus minimize-card"></i></li>
+                                            <li><i class="ik ik-x close-card"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body chat-box scrollable" style="height:300px;">
+                                    <ul class="chat-list">
+                                        <li class="chat-item">
+                                            <div class="chat-img"><img src="img/users/1.jpg" alt="user"></div>
+                                            <div class="chat-content">
+                                                <h6 class="font-medium">Müze Bot</h6>
+                                                <div class="box bg-light-info">Nasıl Yardımcı Olabilirim?</div>
+                                            </div>
+                                            <div class="chat-time">10:56 am</div>
+                                        </li>
+                                        <li class="odd chat-item">
+                                            <div class="chat-content">
+                                                <div class="box bg-light-inverse">Mona Lisa Kimdir?</div>
+                                                <br>
+                                            </div>
+                                            <div class="chat-time">10:59 am</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-footer chat-footer">
+                                    <div class="input-wrap">
+                                        <input type="text" placeholder="Type and enter" class="form-control">
+                                    </div>
+                                    <button type="button" class="btn btn-icon btn-theme" style="margin-top: 2%;"><i
+                                            class="fa fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Popüler Eserler</h4>
+                                    <select class="form-control w-25 ml-auto">
+                                        <option selected="">Günlük</option>
+                                        <option value="1">Haftalık</option>
+                                    </select>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div id="wordcloud2" class="wordcloud">
+                                            <span data-weight="90">quisqu</span>
+                                            <span data-weight="27">egesta</span>
+                                            <span data-weight="38">puru</span>
+                                            <span data-weight="43">risu</span>
+                                            <span data-weight="20">ultrici</span>
+                                            <span data-weight="19">sodal</span>
+                                            <span data-weight="26">matti</span>
+                                            <span data-weight="31">ornar</span>
+                                            <span data-weight="16">dignissim</span>
+                                            <span data-weight="27">lacu</span>
+                                            <span data-weight="23">luctu</span>
+                                            <span data-weight="26">posuer</span>
+                                            <span data-weight="30">malesuada</span>
+                                            <span data-weight="35">diam</span>
+                                            <span data-weight="37">vestibulum</span>
+                                            <span data-weight="90">quisqu</span>
+                                            <span data-weight="27">egesta</span>
+                                            <span data-weight="38">puru</span>
+                                            <span data-weight="43">risu</span>
+                                            <span data-weight="20">ultrici</span>
+                                            <span data-weight="19">sodal</span>
+                                            <span data-weight="26">matti</span>
+                                            <span data-weight="31">ornar</span>
+                                            <span data-weight="16">dignissim</span>
+                                            <span data-weight="27">lacu</span>
+                                            <span data-weight="23">luctu</span>
+                                            <span data-weight="26">posuer</span>
+                                            <span data-weight="30">malesuada</span>
+                                            <span data-weight="35">diam</span>
+                                            <span data-weight="37">vestibulum</span>
+                                            <span data-weight="90">quisqu</span>
+                                            <span data-weight="27">egesta</span>
+                                            <span data-weight="38">puru</span>
+                                            <span data-weight="43">risu</span>
+                                            <span data-weight="20">ultrici</span>
+                                            <span data-weight="19">sodal</span>
+                                            <span data-weight="26">matti</span>
+                                            <span data-weight="31">ornar</span>
+                                            <span data-weight="16">dignissim</span>
+                                            <span data-weight="27">lacu</span>
+                                            <span data-weight="23">luctu</span>
+                                            <span data-weight="26">posuer</span>
+                                            <span data-weight="30">malesuada</span>
+                                            <span data-weight="35">diam</span>
+                                            <span data-weight="37">vestibulum</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="w-100 clearfix">
+                    <span class="text-center text-sm-left d-md-inline-block">Copyright © 2020 All Rights Reserved.</span>
+                    <span class="float-none float-sm-right mt-1 mt-sm-0 text-center">Developed with <i
+                            class="fa fa-coffee"></i></span>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{{ url_for('static', filename='plugins/popper.js/dist/umd/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/jvectormap/jquery-jvectormap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/jvectormap/jvectormap/tests/assets/jquery-jvectormap-world-mill-en.js') }}"></script>
+
+
+    <script src="{{ url_for('static', filename='dist/js/widgets.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/jquery.awesomeCloud-0.2.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#wordcloud2").awesomeCloud({
+                "size": {
+                    "grid": 9,
+                    "factor": 1
+                },
+                "options": {
+                    "color": "random-dark",
+                    "rotationRatio": 0.35
+                },
+                "font": "'Times New Roman', Times, serif",
+                "shape": "circle"
+            });
+        });
+    </script>
+</body>
+
+</html>

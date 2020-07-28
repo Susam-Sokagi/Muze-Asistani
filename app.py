@@ -85,6 +85,23 @@ def answer():
      print("error")
      return None, 404
 
+# GET isteği ile dashboardu yükleyen endpoint
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+  global id
+  id = "null"
+  #return render_template('index.html', data=User)
+  return render_template("dashboard.html")
+  
+
+# GET isteği ile dashboard profil sayfasını yükleyen endpoint
+@app.route('/profile', methods=['GET'])
+def dashboard_profıle():
+  global id
+  id = "null"
+  #return render_template('index.html', data=User)
+  return render_template("profile.html")
+
 # ############################### MODEL ###############################
 
 def answer_question(question, answer_text):

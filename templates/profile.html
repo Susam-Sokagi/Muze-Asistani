@@ -1,0 +1,240 @@
+<!doctype html>
+<html class="no-js" lang="tr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Susam Sokağı Arayüz</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='plugins/icon-kit/dist/css/iconkit.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/theme.min.css') }}">
+    </head>
+
+    <body>
+        <div class="wrapper">
+                    <header class="header-top" header-theme="light">
+                        <div class="container-fluid">
+                            <div class="d-flex justify-content-between">
+                                <div class="top-menu d-flex align-items-center">
+                                    <button type="button" class="btn-icon mobile-nav-toggle d-lg-none"><span></span></button>
+                                    <div class="header-search">
+                                        <div class="input-group">
+                                            <span class="input-group-addon search-close"><i class="ik ik-x"></i></span>
+                                            <input type="text" class="form-control">
+                                            <span class="input-group-addon search-btn"><i class="ik ik-search"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="top-menu d-flex align-items-center">
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false"><img class="avatar" src="{{ url_for('static', filename='img/user.jpg') }}" alt=""></a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="/profile"><i class="ik ik-user dropdown-icon"></i>
+                                                Profil</a>
+                                            <a class="dropdown-item" href="#"><i class="ik ik-settings dropdown-icon"></i>
+                                                Ayarlar</a>
+                                            <a class="dropdown-item" href="#"><span class="float-right"><span
+                                                        class="badge badge-primary">6</span></span><i class="ik ik-mail dropdown-icon"></i>
+                                                Gelen Kutusu</a>
+                                            <a class="dropdown-item" href="#"><i class="ik ik-navigation dropdown-icon"></i>
+                                                Mesajlar</a>
+                                            <a class="dropdown-item" href="#"><i class="ik ik-power dropdown-icon"></i>
+                                                Çıkış</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+            <div class="page-wrap">
+                <div class="app-sidebar colored">
+                    <div class="app-sidebar colored">
+                        <div class="sidebar-header">
+                            <a class="header-brand" href="index.html">
+                                <!-- 
+                                                <div class="logo-img">
+                                                   <img src="" class="header-brand-img" alt=""> 
+                                                </div> 
+                                                -->
+                                <span class="text">Susam Sokağı</span>
+                            </a>
+                            <button type="button" class="nav-toggle"><i data-toggle="expanded"
+                                    class="ik ik-toggle-right toggle-icon"></i></button>
+                            <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>
+                        </div>
+                    
+                        <div class="sidebar-content">
+                            <div class="nav-container">
+                                <nav id="main-menu-navigation" class="navigation-main">
+                                    <div class="nav-lavel">Genel</div>
+                                    <div class="nav-item">
+                                        <a href="/dashboard"><i class="ik ik-bar-chart-2"></i><span>Arayüz</span></a>
+                                    </div>
+                                    <div class="nav-lavel">Kullanıcı</div>
+                                    <div class="nav-item active">
+                                        <a href="/profile"><i class="ik ik-user"></i><span>Profil</span></a>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-content">
+                    <div class="container-fluid">
+                        <div class="page-header">
+                            <div class="row align-items-end">
+                                <div class="col-lg-8">
+                                    <div class="page-header-title">
+                                        <i class="ik ik-file-text bg-blue"></i>
+                                        <div class="d-inline">
+                                            <h5>Kullanıcı Profili</h5>
+                                            <span>Kullanıcı Bilgileriniz ve Profil Güncelleme</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="text-center"> 
+                                            <img src="{{ url_for('static', filename='img/user.jpg') }}" class="rounded-circle" width="150" />
+                                            <h4 class="card-title mt-10">Kaan İnce</h4>
+                                            <p class="card-subtitle">Müze Yöneticisi</p>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-0"> 
+                                    <div class="card-body"> 
+                                        <small class="text-muted d-block">E-Posta Adresi </small>
+                                        <h6>kaanince@susamsokagi.com</h6> 
+                                        <small class="text-muted d-block pt-10">Telefon</small>
+                                        <h6>(511) 111 1111</h6> 
+                                        <small class="text-muted d-block pt-10">Adres</small>
+                                        <h6>71 Kumkapı Mahallesi, Eminönü İstanbul, TR 34130</h6>
+                                        <div class="map-box">
+                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248849.886539092!2d77.49085452149588!3d12.953959988118836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sBengaluru%2C+Karnataka!5e0!3m2!1sen!2sin!4v1542005497600" width="100%" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-md-7">
+                                <div class="card">
+                                    <ul class="nav nav-pills custom-pills" id="pills-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#last-month" role="tab" aria-controls="pills-profile" aria-selected="false">Profil</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-setting-tab" data-toggle="pill" href="#previous-month" role="tab" aria-controls="pills-setting" aria-selected="false">Güncelleme</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade show active"" id="last-month" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-3 col-6"> <strong>Tam İsim</strong>
+                                                        <br>
+                                                        <p class="text-muted">Kaan İnce</p>
+                                                    </div>
+                                                    <div class="col-md-3 col-6"> <strong>Telefon</strong>
+                                                        <br>
+                                                        <p class="text-muted">(511) 111 1111</p>
+                                                    </div>
+                                                    <div class="col-md-3 col-6"> <strong>E-Posta</strong>
+                                                        <br>
+                                                        <p class="text-muted">kaanince@susamsokagi.com</p>
+                                                    </div>
+                                                    <div class="col-md-3 col-6"> <strong>Adres</strong>
+                                                        <br>
+                                                        <p class="text-muted">İstanbul</p>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <p class="mt-30">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries </p>
+                                                <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                                <h4 class="mt-30">İncelenen Konuşmalar</h4>
+                                                <hr>
+                                                <h6 class="mt-30">İngiltere A Müzesi <span class="pull-right">95%</span></h6>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width:95%;"> <span class="sr-only">95% Complete</span> </div>
+                                                </div>
+                                                <h6 class="mt-30">İstanbul B Müzesi <span class="pull-right">90%</span></h6>
+                                                <div class="progress  progress-sm">
+                                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:90%;"> <span class="sr-only">50% Complete</span> </div>
+                                                </div>
+                                                <h6 class="mt-30">Amerika C Müzesi <span class="pull-right">50%</span></h6>
+                                                <div class="progress  progress-sm">
+                                                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;"> <span class="sr-only">50% Complete</span> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="previous-month" role="tabpanel" aria-labelledby="pills-setting-tab">
+                                            <div class="card-body">
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label for="example-name">Tam İsim</label>
+                                                        <input type="text" placeholder="Kaan İnce" class="form-control" name="example-name" id="example-name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-email">E-Posta</label>
+                                                        <input type="email" placeholder="kaanince@susamsokagi.com" class="form-control" name="example-email" id="example-email">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-password">Parola</label>
+                                                        <input type="password" value="password" class="form-control" name="example-password" id="example-password">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-phone">Telefon No</label>
+                                                        <input type="text" placeholder="511 111 1111" id="example-phone" name="example-phone" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-message">Mesaj</label>
+                                                        <textarea name="example-message" name="example-message" rows="5" class="form-control"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="example-country">Ülke Seçiniz</label>
+                                                        <select name="example-message" id="example-message" class="form-control">
+                                                            <option>Türkiye</option>
+                                                            <option>İngiltere</option>
+                                                            <option>Hindistan</option>
+                                                            <option>Amerika</option>
+                                                            <option>Kanada</option>
+                                                        </select>
+                                                    </div>
+                                                    <button class="btn btn-success" type="submit">Profili Güncelle</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="footer">
+                    <div class="w-100 clearfix">
+                        <span class="text-center text-sm-left d-md-inline-block">Copyright © 2020 All Rights Reserved.</span>
+                        <span class="float-none float-sm-right mt-1 mt-sm-0 text-center">Developed with <i
+                                class="fa fa-coffee"></i></span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="{{ url_for('static', filename='plugins/popper.js/dist/umd/popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='plugins/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='dist/js/theme.min.js') }}"></script>
+    </body>
+</html>
