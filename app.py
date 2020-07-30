@@ -96,7 +96,7 @@ def dashboard():
 
 # GET isteği ile dashboard profil sayfasını yükleyen endpoint
 @app.route('/profile', methods=['GET'])
-def dashboard_profıle():
+def dashboard_profile():
   global id
   id = "null"
   #return render_template('index.html', data=User)
