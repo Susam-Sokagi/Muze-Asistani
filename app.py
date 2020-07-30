@@ -1,49 +1,56 @@
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
-import logging, time, torch
+import logging
+import time
+import torch
+import random
 from transformers import BertForQuestionAnswering, BertTokenizer
 
-# DEFINE STEP        ############################
+################ Tanımlama ################
 
-#logging.basicConfig(format='%(asctime)-10s   %(message)s',datefmt="%Y-%m-%d-%H-%M-%S", level=logging.INFO)
+logging.getLogger().setLevel(logging.INFO)
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-output_dir = 'model'
+output_dir = '/home/kenobi/Desktop/Muze-Asistani/model'
 model = BertForQuestionAnswering.from_pretrained(output_dir)
 tokenizer = BertTokenizer.from_pretrained(output_dir)
 
-# DATABASE  ############################
+################ DB Baglantısı ###############
+
 class muze(db.Model):
-    name = db.Column('name', db.String(12), primary_key=True)
+    id = db.Column('id', db.String(12), primary_key=True)
     description1 = db.Column(db.String(4096))
     description2 = db.Column(db.String(4096))
     description3 = db.Column(db.String(4096))
 
 #yeni girdi ekleme işlemi
-def add_data(nm, dc1, dc2= ' ', dc3=' '):
-    new_data = muze(name=nm, description1=dc1, description2=dc2, description3=dc3,)
+def add_data(id, dc1, dc2= ' ', dc3=' '):
+    new_data = muze(id=id, description1=dc1, description2=dc2, description3=dc3,)
     db.session.add(new_data)
     db.session.commit()
-    logging.critical("Yeni Girdi Eklendi. Name: {}".format(nm))
+    logging.info("Yeni Girdi Eklendi. Name: {}".format(id))
 
 #girdi silme işlemi
-def del_data(nm):
-    muze.query.filter_by(name=nm).delete()
+def del_data(id):
+    muze.query.filter_by(id=id).delete()
     db.session.commit()
-    logging.critical("Girdi Silindi. Name: {}".format(nm))
+    logging.info("Girdi Silindi. Name: {}".format(id))
 
 #qr koddan gelen name ile textini alma işlemi
-def get_text(nm):
-    text = muze.query.filter_by(name=nm).first()
+def get_text(id):
+    text = muze.query.filter_by(id=id).first()
     dc1 = text.description1
-    logging.critical(" Name: {} Icin Aciklama Metnine Erisildi".format(nm))
-    return dc1
+    dc2 = text.description2
+    dc3 = text.description3
+    logging.info(" Name: {} Icin Aciklama Metnine Erisildi".format(id))
+    return dc1, dc2, dc3
 
-# ################################# WEB #################################
+################ Web ###############
+
 id = 'null'  # QR ile gelen kategori türünü tutan global değişken
 
 # GET isteği ile anasayfayı yükleyen endpoint
@@ -74,10 +81,54 @@ def answer():
   message = request.form['message']
   if message:
     if id != 'null':
-      message2 = "'" + message + "' mı demek istediniz?"
-      time.sleep(1)
-      answer = answer_question(message, get_text(id))
-      return answer, 200
+        negative1 = ['😶 Zor bi soru oldu sanırım. Ama cevabım, ',
+                     '🤔 Cevap vemek biraz zorladı ama sanırım cevabım bu. ',
+                     '🧐 Şasırtmacalı sorumu sordun emin olamadım. Ama bildiklerim: ']
+
+        negative2 = ['Senin için bir sonuç buldum ama pek emin değilim.',
+                     'Galiba bir terslik oldu. Pek güzel cevap bulamadım bu sefer.',
+                     'Zor bi sorumu sordun. Cevap vermek pek kolay olmadı.']
+
+        null = ['İnanamıyorum hiç cevap bulamadım🧐 . Başka bir soru sormaya ne dersin ☺️',
+                'Hiç çalışmadığım yerden sordun 🤯 Bu sorunu araştıracağım🤓',
+                'Geliştiricilerim bu soruyu sormanı beklemiyordu sanırım 🙄 Ne yazık ki cevap bulamadım']
+
+        positive1 = ['😎 Tam da çalıştığım yerden sordun. İşte bildiklerim: ',
+                     'Bence bu soruya bu cevap tam uyacaktır.🥳 Sorunun cevabı, ',
+                     'Sanırım ben bu soruyu çözmek için geliştirilmişim 🥰 . İşte cevabım, ']
+
+        positive2 = ['😎 Güzel bi soru sordun. İşte cevabım: ',
+                     ' ',
+                     ' ']
+
+        logging.info("\t \t \t \t ##### Sorulan soru: %s", message)
+        # max score answer
+        dc1, dc2, dc3 = get_text(id)
+        dc = [dc1, dc2, dc3]
+        a_dict = {}
+        for x in list(dc):
+            answer, score = answer_question(message, x)
+            if ("[CLS]" in answer) or ("[UNK]" in answer):
+                print(" ")
+            else:
+                a_dict[answer] = score
+        if not a_dict:
+            answer = "{}".format(random.choice(null))
+        else:
+            answer = max(a_dict, key=a_dict.get)
+            score = max(a_dict.values())
+            if score > 9:
+                answer = '{}{}'.format(random.choice(positive1), answer)
+            elif score > 4:
+                answer = '{}{}'.format(random.choice(positive2), answer)
+            elif score > 0:
+                answer = '{}{}'.format(random.choice(negative1), answer)
+            else:
+                answer = '{} 😔 \n Yinede cevap vermek gerekirse, {}'.format(random.choice(negative2), answer)
+
+            logging.info("\t \t \t \t ##### Verilen cevap: %s", answer)
+
+        return answer, 200
     else:
       message = "Öncelikle QR Kod Yüklemelisiniz."
       return message, 200
@@ -102,7 +153,7 @@ def dashboard_profile():
   #return render_template('index.html', data=User)
   return render_template("profile.html")
 
-# ############################### MODEL ###############################
+################ Model ###############
 
 def answer_question(question, answer_text):
     input_ids = tokenizer.encode(question, answer_text)
@@ -116,6 +167,7 @@ def answer_question(question, answer_text):
     #baslangıc ve bıtıs ıcın en ıyı olasılıkları secıyoruz
     start = torch.argmax(pred_start)
     end = torch.argmax(pred_end)
+
     #geri dönus
     tokens = tokenizer.convert_ids_to_tokens(input_ids)
     answer = tokens[start]
@@ -127,9 +179,10 @@ def answer_question(question, answer_text):
         else:
             answer += ' ' + tokens[i]
 
-    print("Answer: {}".format(answer))
-    print("Score: {}".format(score))
-    return answer
+    logging.info("\t \t \t ##### Answer: {}".format(answer))
+    logging.info("\t \t \t ##### Score: {}".format(score))
+
+    return answer ,score
 
 if __name__ == '__main__':
     app.run(debug='true')
