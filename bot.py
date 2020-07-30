@@ -3,26 +3,27 @@ import pyzbar.pyzbar as pyzbar
 import logging
 import torch
 import sqlite3
-import telegram
+import random
+import time
+import json
 from transformers import BertForQuestionAnswering, BertTokenizer, pipeline
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
-
+import speech_recognition as sr
+import os
 
 ################ Tanımlama ################
 
-logging.basicConfig(format='%(asctime)-10s   %(message)s',datefmt="%Y-%m-%d-%H-%M-%S", level=logging.INFO)
-logger = logging.getLogger(__name__)
+logging.getLogger().setLevel(logging.INFO)
 PHOTO, QUESTION = range(2)
 
-TOKEN = "TOKEN"
+TOKEN = "token"
 updater = Updater(TOKEN, use_context=True)
 
 output_dir = 'model'
 model = BertForQuestionAnswering.from_pretrained(output_dir)
 tokenizer = BertTokenizer.from_pretrained(output_dir)
-
 
 ################ DB Baglantısı ###############
 
@@ -35,22 +36,15 @@ def get_text(nm):
     dc2 = connection.execute("SELECT description2 FROM muze WHERE id = ? ", (nm,)).fetchall()[0][0]
     dc3 = connection.execute("SELECT description3 FROM muze WHERE id = ? ", (nm,)).fetchall()[0][0]
 
-    logging.critical(" Name: {} Icin Aciklama Metnine Erisildi".format(nm))
-    #text_data=dc1.fetchall()[0][0]
-    #print(text_data)
-    return dc1,dc2,dc3
-
-########### DB Gezme ############
-
+    logging.info("\t \t \t \t ##### Name: {} Icin Aciklama Metinlerine Erisildi".format(nm))
+    return dc1, dc2, dc3
 
 ############### QR Kod Okuyucu #################
 def qr(img):
     image = cv2.imread(img)
     decodedObjects = pyzbar.decode(image)
     for obj in decodedObjects:
-        print("Type:", obj.type)
         data = obj.data.decode("utf-8")
-        print("Data: ", data, "\n")
     return data
 
 ############## BOT  ####################
@@ -58,7 +52,9 @@ def start(update, context):
     user = update.message.from_user
     update.message.reply_text(
         'Merhaba\t' + user.first_name + '\tben Müze Asistanın 🤗 \n')
+    time.sleep(1)
     update.message.reply_text(' Beraber bu müzedeki eserleri keşfetmeye ne dersin? 🤠 \n ')
+    time.sleep(1)
     update.message.reply_text(' Hadi başlayalımm! \n '
                               '📎(ataç simgesi) ile QR kodu yüklersen sana yardımcı olmaya hazırım')
     return PHOTO
@@ -69,93 +65,77 @@ def photo(update, context):
     user = update.message.from_user
     photo_file = update.message.photo[-1].get_file()
     photo_file.download('user_photo.jpg')
-    logger.info("Photo of %s: %s", user.first_name, 'user_photo.jpg')
-    data_name = qr('user_photo.jpg')
+    logging.info("\t \t \t \t ##### %s tarafından görsel yüklendi: %s", user.first_name, 'user_photo.jpg')
+    try:
+        data_name = qr('user_photo.jpg')
+        logging.info("\t \t \t \t ##### %s tarafından tartılan obje: %s", user.first_name, data_name)
 
-    name = connection.execute("SELECT name FROM muze WHERE id = ? ", (data_name,)).fetchall()[0][0]
+        name = connection.execute("SELECT name FROM muze WHERE id = ? ", (data_name,)).fetchall()[0][0]
 
-    reply_keyboard = [['SSS'], ['QUESTION']]
-    reply_markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-    update.message.reply_text('Harika! 🥳 şimdi\t' + name + ' hakkında merak ettiklerini sorabilirsin \n'
-                                                            'veya sana bu eser hakkında farklı sorular da önerebilirim ')
-
-    if update.message.text == 'SSS':
-        return SSS(dn=data_name)
-    else:
+        update.message.reply_text('Harika! 🥳 şimdi\t' + name + ' hakkında merak ettiklerini sorabilirsin \n'
+                                                                'veya sana bu eser hakkında farklı sorular da önerebilirim ')
         return QUESTION
-
-
-###öneri soru
-def SSS(update, dn):
-    q1 = connection.execute("SELECT soru1 FROM sorular WHERE id = ? ", (dn,)).fetchall()[0][0]
-    q2=  connection.execute("SELECT soru2 FROM sorular WHERE id = ? ", (dn,)).fetchall()[0][0]
-    q2 = connection.execute("SELECT soru3 FROM sorular WHERE id = ? ", (dn,)).fetchall()[0][0]
-
-
-    button_list = [
-        InlineKeyboardButton('%s', callback_data=1),
-        InlineKeyboardButton('%s', callback_data=2)]
-    reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
-    # update.message.reply_text("Please choose from the following : ",reply_markup=reply_markup)
-
-    answer = answer_question(update.message.text, get_text(dn))
-    update.message.reply_text(answer)
-
-
-def build_menu(buttons,n_cols,header_buttons=None,footer_buttons=None):
-    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
-    if header_buttons:
-        menu.insert(0, header_buttons)
-    if footer_buttons:
-        menu.append(footer_buttons)
-    return menu
-
+    except:
+        update.message.reply_text('Birşeyler ters gitti 🧐. Tekrar dener misin.')
+        return PHOTO
 
 
 def question(update, context):
+    negative1 = ['😶 Zor bi soru oldu sanırım. Ama cevabım, ',
+                '🤔 Cevap vemek biraz zorladı ama sanırım cevabım bu. ',
+                '🧐 Şasırtmacalı sorumu sordun emin olamadım. Ama bildiklerim: ']
+
+    negative2 = ['Senin için bir sonuç buldum ama pek emin değilim.',
+                 'Galiba bir terslik oldu. Pek güzel cevap bulamadım bu sefer.',
+                 'Zor bi sorumu sordun. Cevap vermek pek kolay olmadı.']
+
+    null = ['İnanamıyorum hiç cevap bulamadım🧐 . Başka bir soru sormaya ne dersin ☺️',
+            'Hiç çalışmadığım yerden sordun 🤯 Bu sorunu araştıracağım🤓',
+            'Geliştiricilerim bu soruyu sormanı beklemiyordu sanırım 🙄 Ne yazık ki cevap bulamadım']
+
+    positive1 = ['😎 Tam da çalıştığım yerden sordun. İşte bildiklerim: ',
+                 'Bence bu soruya bu cevap tam uyacaktır.🥳 Sorunun cevabı, ',
+                 'Sanırım ben bu soruyu çözmek için geliştirilmişim 🥰 . İşte cevabım, ']
+
+    positive2 = ['😎 Güzel bi soru sordun. İşte cevabım: ',
+                 ' ',
+                 ' ']
+
 
     user = update.message.from_user
 
     if update.message.text == '/yeniqr':
         return CommandHandler('yeniqr', newqr)
     else:
-        logger.info("Question of %s: %s", user.first_name, update.message.text)
+        logging.info("\t \t \t \t ##### %s tarafından sorulan soru: %s", user.first_name, update.message.text)
         photo_data = qr('user_photo.jpg')
-
         #max score answer
         dc1,dc2,dc3 = get_text(photo_data)
-        answer1, score1 = answer_question(update.message.text, dc1)
-        answer2, score2 = answer_question(update.message.text, dc2)
-        answer3, score3 = answer_question(update.message.text, dc3)
-
-
+        dc=[dc1,dc2,dc3]
         a_dict = {}
-        a_dict[answer1] = score1
-        a_dict[answer2] = score2
-        a_dict[answer3] = score3
+        for x in list(dc):
+            answer, score =answer_question(update.message.text, x)
+            if ("[CLS]" in answer) or ("[UNK]" in answer):
+                print(" ")
+            else:
+                a_dict[answer] = score
+        if not a_dict:
+            update.message.reply_text('{}'.format(random.choice(null)))
+        else:
+            answer = max(a_dict, key=a_dict.get)
+            score = max(a_dict.values())
+            if score >9:
+                update.message.reply_text('{}{}'.format(random.choice(positive1), answer))
+            elif score >4:
+                update.message.reply_text('{}{}'.format(random.choice(positive2),answer))
+            elif score >0:
+                update.message.reply_text('{}{}'.format(random.choice(negative1), answer))
+            else:
+                update.message.reply_text('{} 😔 \n Yinede cevap vermek gerekirse, {}'.format(random.choice(negative2), answer))
 
-        answer = max(a_dict, key=a_dict.get)
-
-
-        print(answer)
-        print(a_dict[answer])
-
-
-        # answer = answer_question(update.message.text, get_text(photo_data,update))
-
-        #if 0< maxScore < 6:
-        #   update.message.reply_text('emin değilim ama 🙄')
-
-
-        if ("[CLS]" in answer) or ("[UNK]" in answer): update.message.reply_text(
-            'Anlayamadım 🥺 Lütfen sorunu biraz daha spesifik sorabilir misin?'
-            '\n Hadi tekrar deneyelim!  ')
-        else: update.message.reply_text(answer)
-
-        logger.info("Answer for %s: %s", update.message.text, answer)
+            logging.info("\t \t \t \t ##### %s için verilen cevap: %s", update.message.text, answer)
 
     return QUESTION
-    #return ConversationHandler('question', question)
 
 #yeni qr
 def newqr(update, context):
@@ -166,11 +146,10 @@ def newqr(update, context):
 
 def cancel(update, context):
     user = update.message.from_user
-    logger.info("User %s canceled the conversation.", user.first_name)
+    logging.info("\t \t \t \t ##### %s konuşmayı sonlandırdı.", user.first_name)
     update.message.reply_text('Tekrar görüşmek üzere '+ user.first_name +'\thoscakal 😊',
                               reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
-
 
 def main():
     dp = updater.dispatcher
@@ -179,15 +158,13 @@ def main():
         entry_points=[CommandHandler('start', start), CommandHandler('basla', start), ],
         states={ PHOTO: [MessageHandler(Filters.photo, photo)],
                  QUESTION: [MessageHandler(Filters.text, question)],
-
                  },
 
         fallbacks=[CommandHandler('bitir', cancel),
-                   CommandHandler('yeniqr', newqr)]
+                   CommandHandler('yeniqr', newqr),
+                   ]
     )
     dp.add_handler(conv_handler)
-    #dp.add_handler(CommandHandler('newqr', newqr))
-
 
     # Start the Bot
     updater.start_polling()
@@ -220,11 +197,9 @@ def answer_question(question, answer_text):
         else:
             answer += ' ' + tokens[i]
 
-    print("Answer: {}".format(answer))
-    print("Score: {}".format(score))
+    logging.info("\t \t \t ##### Answer: {}".format(answer))
+    logging.info("\t \t \t ##### Score: {}".format(score))
     return answer, score
 
 if __name__ == '__main__':
     main()
-
-
