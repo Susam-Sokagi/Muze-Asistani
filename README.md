@@ -28,7 +28,7 @@
 
 <br />
 <p align="center">
-  <a href="https://github.com/Susam-Sokagi/Muze-Asistani/blob/master/static/assets">
+  <a href="https://github.com/Susam-Sokagi/Muze-Asistani">
     <img src="logo.png" alt="Logo" width="120" height="120">
   </a>
   <h2 align="center">Müze Asistanı</h2>
@@ -78,10 +78,6 @@ Müzelerde ziyaretçilerin eserler ve tarihi olaylar hakkında bilgi edinmede s�
 ### Proje Fikri
 Müze ziyaretçileri ile interaktif iletişime geçen ve müze hakkında bilgi sağlayan bir bireysel asistan geliştirmeyi hedefliyoruz.
 
-### Çözüm Önerileri
-- İnteraktif bir Türkçe Asistan geliştirmek.
-- Müze detayında veriler ile müzeye özel model eğitimi yapmak
-- Kişilere daha doğal bir yaklaşımla, soru cevap şeklinde bilgi dönüşü yapabilmek.
 
 ## BERT
 
