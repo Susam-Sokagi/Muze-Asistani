@@ -10,8 +10,7 @@ from transformers import BertForQuestionAnswering, BertTokenizer, pipeline
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
-import speech_recognition as sr
-import os
+
 
 ################ Tanımlama ################
 

@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+p
+[dev-packages]
+
+[packages]
+flask = "*"
+transformers = "*"
+torch = "*"
+python-telegram-bot = "*"
+opencv-python = "*"
+flask-sqlalchemy = "*"
+pyzbar = "*"
+
+[requires]
+python_version = "3.6"
