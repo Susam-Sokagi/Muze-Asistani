@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-output_dir = 'model'
+output_dir = '/home/kenobi/Desktop/Muze-Asistani/model'
 model = BertForQuestionAnswering.from_pretrained(output_dir)
 tokenizer = BertTokenizer.from_pretrained(output_dir)
 

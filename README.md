@@ -28,7 +28,7 @@
 
 <br />
 <p align="center">
-  <a href="https://github.com/Susam-Sokagi/Muze-Asistani">
+  <a href="https://github.com/Susam-Sokagi/Muze-Asistani/blob/master/static/assets">
     <img src="logo.png" alt="Logo" width="120" height="120">
   </a>
   <h2 align="center">Müze Asistanı</h2>
@@ -71,7 +71,17 @@
 
 # Proje Hakkında
 
-Açıklama
+### Problem
+
+Müzelerde ziyaretçilerin eserler ve tarihi olaylar hakkında bilgi edinmede sıkıntı çekmesi, bilgi edinmek için kişi veya kaynak bulmakta zorlanılması. Bu yüzden müze memnuniyetinin düşmesine ve kötü görüşler oluşmasına sebep olur.
+
+### Proje Fikri
+Müze ziyaretçileri ile interaktif iletişime geçen ve müze hakkında bilgi sağlayan bir bireysel asistan geliştirmeyi hedefliyoruz.
+
+### Çözüm Önerileri
+- İnteraktif bir Türkçe Asistan geliştirmek.
+- Müze detayında veriler ile müzeye özel model eğitimi yapmak
+- Kişilere daha doğal bir yaklaşımla, soru cevap şeklinde bilgi dönüşü yapabilmek.
 
 ## BERT
 
@@ -131,7 +141,7 @@ Verilen metinin içerisinden, her bir token'ın cevab cümlesini için başlang�
 | <a href="https://canturan10.github.io" target="_blank">**Oğuzcan Turan**</a> | <a href="https://github.com/akkayameva" target="_blank">**Meva Akkaya**</a> | <a href="https://github.com/burakakkas" target="_blank">**Y. Burak Akkaş**</a> |
 | :---: |:---:| :---:|
 | [![SusamSokagi](https://avatars0.githubusercontent.com/u/34894012?s=460&u=722268bba03389384f9d673d3920abacf12a6ea6&v=4&s=200)](https://github.com/Susam-Sokagi/Muze-Asistani)    | [![SusamSokagi](https://avatars1.githubusercontent.com/u/30075835?s=460&v=4&s=200)](https://github.com/Susam-Sokagi/Muze-Asistani) | [![SusamSokagi](https://avatars3.githubusercontent.com/u/34313276?s=460&u=dad6ad0d8931bb07033704217e4192b4f2e09697&v=4&s=200)](https://github.com/Susam-Sokagi/Muze-Asistani)  |
-| Açıklama | Açıklama | Açıklama |
+| Derin Öğrenme Geliştirici | Derin Öğrenme Geliştirici | Front-end Geliştirici |
 | <a href="https://github.com/canturan10" target="_blank">`github.com/canturan10`</a> | <a href="https://github.com/akkayameva" target="_blank">`github.com/akkayameva`</a> | <a href="https://github.com/burakakkas" target="_blank">`github.com/burakakkas`</a> |
 | <a href="https://www.linkedin.com/in/canturan10/" target="_blank">`linkedin.com/canturan10`</a> | <a href="https://www.linkedin.com/in/akkayameva/" target="_blank">`linkedin.com/akkayameva`</a> | <a href="https://www.linkedin.com/in/burakakkas/" target="_blank">`linkedin.com/burakakkas`</a> |
 | <a href="mailto:can.turan.10@gmail.com" target="_blank">`can.turan.10@gmail.com`</a> | <a href="mailto:akkayameva@gmail.com" target="_blank">`akkayameva@gmail.com`</a> | <a href="mailto:burakakkas55@gmail.com" target="_blank">`burakakkas55@gmail.com`</a> |
