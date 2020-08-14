@@ -38,7 +38,7 @@
     <br />
     <a href="https://www.youtube.com/watch?v=bLJLkUn2jcA&feature=youtu.be">Demo</a>
     ·
-    <a href="https://github.com/Susam-Sokagi/Muze-Asistani/sunum.pdf">Sunum</a>
+    <a href="https://github.com/Susam-Sokagi/Muze-Asistani/blob/master/sunum.pdf">Sunum</a>
     ·
     <a href="https://huggingface.co/savasy/bert-base-turkish-squad">Model</a>
     </a>
