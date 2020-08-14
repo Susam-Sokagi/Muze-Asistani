@@ -36,15 +36,21 @@
     Açık Hack '20
     <br />
     <br />
-    <a href="https://github.com/Susam-Sokagi/Muze-Asistani">Demo</a>
+    <a href="https://www.youtube.com/watch?v=bLJLkUn2jcA&feature=youtu.be">Demo</a>
     ·
+    <a href="https://github.com/Susam-Sokagi/Muze-Asistani/sunum.pdf">Sunum</a>
+    ·
+    <a href="https://huggingface.co/savasy/bert-base-turkish-squad">Model</a>
+    </a>
+  </p>
+    </p>
+    <p align="center">
     <a href="#kullanım">Kullanım</a>
     ·
     <a href="#qr-kod">QR Kod</a>
   </p>
   <p align="center">
       <a href="https://github.com/Susam-Sokagi/Muze-Asistani/issues">Hata Bildir</a>
-  </p>
 </p>
 
 
@@ -137,7 +143,7 @@ Verilen metinin içerisinden, her bir token'ın cevab cümlesini için başlang�
 | <a href="https://canturan10.github.io" target="_blank">**Oğuzcan Turan**</a> | <a href="https://github.com/akkayameva" target="_blank">**Meva Akkaya**</a> | <a href="https://github.com/burakakkas" target="_blank">**Y. Burak Akkaş**</a> |
 | :---: |:---:| :---:|
 | [![SusamSokagi](https://avatars0.githubusercontent.com/u/34894012?s=460&u=722268bba03389384f9d673d3920abacf12a6ea6&v=4&s=200)](https://github.com/Susam-Sokagi/Muze-Asistani)    | [![SusamSokagi](https://avatars1.githubusercontent.com/u/30075835?s=460&v=4&s=200)](https://github.com/Susam-Sokagi/Muze-Asistani) | [![SusamSokagi](https://avatars3.githubusercontent.com/u/34313276?s=460&u=dad6ad0d8931bb07033704217e4192b4f2e09697&v=4&s=200)](https://github.com/Susam-Sokagi/Muze-Asistani)  |
-| Derin Öğrenme Geliştirici | Derin Öğrenme Geliştirici | Front-end Geliştirici |
+| Derin Öğrenme Geliştirici | Derin Öğrenme Geliştirici | Full Stack Geliştirici |
 | <a href="https://github.com/canturan10" target="_blank">`github.com/canturan10`</a> | <a href="https://github.com/akkayameva" target="_blank">`github.com/akkayameva`</a> | <a href="https://github.com/burakakkas" target="_blank">`github.com/burakakkas`</a> |
 | <a href="https://www.linkedin.com/in/canturan10/" target="_blank">`linkedin.com/canturan10`</a> | <a href="https://www.linkedin.com/in/akkayameva/" target="_blank">`linkedin.com/akkayameva`</a> | <a href="https://www.linkedin.com/in/burakakkas/" target="_blank">`linkedin.com/burakakkas`</a> |
 | <a href="mailto:can.turan.10@gmail.com" target="_blank">`can.turan.10@gmail.com`</a> | <a href="mailto:akkayameva@gmail.com" target="_blank">`akkayameva@gmail.com`</a> | <a href="mailto:burakakkas55@gmail.com" target="_blank">`burakakkas55@gmail.com`</a> |
@@ -254,6 +260,16 @@ Sonrasından Telegram Botumuz çalışacaktır.
 
 
 # Kullanım
+## Tanıtım Videosu
+
+Videoyu izlemek için gif'e tıklayabirsin. Yada [buradan](https://www.youtube.com/watch?v=bLJLkUn2jcA&feature=youtu.be) ulaşabilirsin.
+
+[![Tanıtım Videosu Web](https://j.gifs.com/k84YRX.gif)](https://www.youtube.com/watch?v=bLJLkUn2jcA&feature=youtu.be)
+
+[![Tanıtım Videosu Telegram](https://j.gifs.com/ZYQA66.gif)](https://www.youtube.com/watch?v=bLJLkUn2jcA&feature=youtu.be)
+
+[![Tanıtım Videosu Panel](https://j.gifs.com/yogqPW.gif)](https://www.youtube.com/watch?v=bLJLkUn2jcA&feature=youtu.be)
+
 
 ## QR Kod
 
